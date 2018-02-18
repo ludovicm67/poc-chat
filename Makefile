@@ -6,3 +6,6 @@ run-server:
 run-dev-server:
 	cd server && iex -S mix
 
+.PHONY: run-nodejs-client
+run-nodejs-client:
+	node client/nodejs/client.js

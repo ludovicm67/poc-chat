@@ -3,7 +3,7 @@ var readline = require('readline');
 var client = new net.Socket();
 client.setEncoding('utf-8');
 
-client.connect(4040, '127.0.0.1', function() {
+client.connect(4242, '127.0.0.1', function() {
   console.log('Connected!');
   client.write("Node client connected!\n");
 });
