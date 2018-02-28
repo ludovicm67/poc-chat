@@ -6,6 +6,13 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ludovicm67/poc-chat.git"
+  },
   "author": "ludovicm67",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "prompts": "^0.1.4"
+  }
 }
