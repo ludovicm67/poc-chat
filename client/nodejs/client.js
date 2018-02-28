@@ -44,6 +44,13 @@ askServerDetails().then((response) => {
     console.log(data.replace(/\n$/, ""));
   });
 
+  // error handling
+  client.on('error', err => {
+    console.error(`  !!  ${err}.`);
+    client.destroy();
+    rl.close();
+  });
+
   // readline init
   const rl = readline.createInterface({
     input: process.stdin,
