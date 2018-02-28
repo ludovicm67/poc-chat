@@ -1,3 +1,8 @@
+.PHONY: setup
+setup:
+	@cd client/nodejs && npm install
+	@cd server && mix deps.get
+
 .PHONY: run-server
 run-server:
 	@cd server && mix run --no-halt

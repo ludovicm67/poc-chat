@@ -23,6 +23,8 @@
 /server/chat-*.tar
 
 
+# Node_modules folder
+node_modules/
 
 
 
