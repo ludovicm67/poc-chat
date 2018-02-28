@@ -1,7 +1,8 @@
 .PHONY: setup
 setup:
-	@cd client/nodejs && npm install
-	@cd server && mix deps.get
+	cd client/nodejs && npm install
+	protoc --js_out=import_style=commonjs,binary:./client/nodejs messages.proto
+	cd server && mix deps.get
 
 .PHONY: run-server
 run-server:

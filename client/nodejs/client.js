@@ -2,9 +2,10 @@
 const net      = require('net');
 const readline = require('readline');
 const prompts  = require('prompts');
+const messages = require('./messages_pb');
 
 // informations we need to ask the user about the server location
-async function askServerDetails() {
+async function askDetails() {
   let questions = [
     {
       type: 'text',
@@ -19,14 +20,42 @@ async function askServerDetails() {
       initial: 4242,
       min: 0,
       max: 65535
-    }
+    },
+    {
+      type: 'text',
+      name: 'user',
+      message: 'Username',
+      initial: 'NodeJS'
+    },
   ];
   return await prompts(questions);
 };
 
+// encode a message
+function msgEncode(content, user) {
+  let message = new messages.Message();
+  message.setContent(content);
+  message.setUser(user);
+  return message.serializeBinary() + '\n';
+}
+
+// decode a message
+function msgDecode(msg) {
+  let message;
+  try {
+    message = messages.Message.deserializeBinary(msg);
+  } catch (e) { // in case the message was sent without protobuf
+    message = new messages.Message();
+    message.setContent(msg.replace(/\n$/, ''));
+  }
+  return message;
+}
 
 // first we get all needed informations from the user, then we create the socket
-askServerDetails().then((response) => {
+askDetails().then(response => {
+
+  // just to store the user
+  const user = response.user;
 
   // client socket init
   const client = new net.Socket();
@@ -35,13 +64,14 @@ askServerDetails().then((response) => {
   // try to connect
   client.connect(response.port, response.host, () => {
     console.log(`Connected to ${response.host}:${response.port}!`);
-    console.log('Type /quit to exit.\n\n')
-    client.write("Node client connected!\n");
+    console.log('Type /quit to exit.\n\n');
+    client.write(msgEncode("Node client connected!", user));
   });
 
   // when we receive data, we log it in the console
   client.on('data', data => {
-    console.log(data.replace(/\n$/, ""));
+    let msg = msgDecode(data);
+    console.log(msg.getContent());
   });
 
   // error handling
@@ -64,7 +94,7 @@ askServerDetails().then((response) => {
       rl.close();
       console.log("Goodbye!");
     } else {
-      client.write(data + "\n");
+      client.write(msgEncode(data, user));
     }
   });
 });

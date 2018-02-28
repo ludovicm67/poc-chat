@@ -2,5 +2,6 @@ syntax = "proto3";
 package chat;
 
 message Message {
-  required string content = 1;
+  string content = 1;
+  string user = 2;
 }

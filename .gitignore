@@ -26,7 +26,8 @@
 # Node_modules folder
 node_modules/
 
-
+# compiled protobuf messages
+*_pb.js
 
 
 # UNITY
